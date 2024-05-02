@@ -3,14 +3,6 @@ import * as Y from 'yjs'
 import * as t from 'lib0/testing'
 
 /**
- * @param {Y.Array<any>} array0
- */
-function arrayHasUnitWithUndefinedContent (array0) {
-  const badUnit = array0.toJSON().find((u) => !u.content)
-  return !!badUnit
-}
-
-/**
  * @param {t.TestCase} tc
  */
 export const testUndoMapSetAndDeleteFromArray = tc => {
@@ -18,30 +10,31 @@ export const testUndoMapSetAndDeleteFromArray = tc => {
   const undoManager = new Y.UndoManager(array0)
 
   const mapInArray = new Y.Map()
-  mapInArray.set('custom-prop', 'untouched prop value')
-  mapInArray.set('content', 'to be changed content')
+  mapInArray.set('untouchedProp', 'untouched prop value')
+  const toBeChangedPropKey = 'toBeChangedProp'
+  mapInArray.set(toBeChangedPropKey, 'before change')
   array0.push([mapInArray])
   testConnector.syncAll()
 
   // START UNDO BLOCK
   undoManager.stopCapturing()
 
-  // Change unit1 content
-  mapInArray.set('content', 'changed content')
+  // Change some value in the YMap
+  mapInArray.set(toBeChangedPropKey, 'changed content')
   testConnector.syncAll()
 
-  // Delete unit1 from parent
+  // undoManager.stopCapturing() // Workaround is to split up the undo and then doing undo twice
+
+  // Delete the YMap from its parent Array
   array0.delete(0, 1)
   testConnector.syncAll()
 
-  // Undo the change content + unit deletion
+  // Undo the set + deletion from parent in 1 undo
   undoManager.undo()
-
-  t.assert(arrayHasUnitWithUndefinedContent(array0) === false) // OK
-  t.assert(arrayHasUnitWithUndefinedContent(array1) === false) // OK
+  // undoManager.undo() // Workaround is to split up the undo and then doing undo twice
 
   testConnector.syncAll()
 
-  t.assert(arrayHasUnitWithUndefinedContent(array0) === false) // OK
-  t.assert(arrayHasUnitWithUndefinedContent(array1) === false) // Failing
+  t.assert(array0.toJSON()[0][toBeChangedPropKey] === 'before change') // OK
+  t.assert(array1.toJSON()[0][toBeChangedPropKey] === 'before change') // Failing and undefined instead
 }

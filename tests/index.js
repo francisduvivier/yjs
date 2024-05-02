@@ -7,7 +7,6 @@ import * as xml from './y-xml.tests.js'
 import * as encoding from './encoding.tests.js'
 import * as undoredo from './undo-redo.tests.js'
 import * as undoredobug from './tofix/undo-redo.bug-reproduction.spec.js'
-import * as undoredobugworkaround from './tofix/undo-redo.bug-reproduction.workaround.spec.js'
 import * as compatibility from './compatibility.tests.js'
 import * as doc from './doc.tests.js'
 import * as snapshot from './snapshot.tests.js'
@@ -33,8 +32,7 @@ runTests({
   snapshot,
   updates,
   relativePositions,
-  undoredobug,
-  undoredobugworkaround
+  undoredobug
 }).then(success => {
   /* istanbul ignore next */
   if (isNode) {
