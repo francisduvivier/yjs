@@ -6,6 +6,8 @@ import * as text from './y-text.tests.js'
 import * as xml from './y-xml.tests.js'
 import * as encoding from './encoding.tests.js'
 import * as undoredo from './undo-redo.tests.js'
+import * as undoredobug from './tofix/undo-redo.bug-reproduction.spec.js'
+import * as undoredobugworkaround from './tofix/undo-redo.bug-reproduction.workaround.spec.js'
 import * as compatibility from './compatibility.tests.js'
 import * as doc from './doc.tests.js'
 import * as snapshot from './snapshot.tests.js'
@@ -20,7 +22,19 @@ if (isBrowser) {
   log.createVConsole(document.body)
 }
 runTests({
-  doc, map, array, text, xml, encoding, undoredo, compatibility, snapshot, updates, relativePositions
+  doc,
+  map,
+  array,
+  text,
+  xml,
+  encoding,
+  undoredo,
+  compatibility,
+  snapshot,
+  updates,
+  relativePositions,
+  undoredobug,
+  undoredobugworkaround
 }).then(success => {
   /* istanbul ignore next */
   if (isNode) {
