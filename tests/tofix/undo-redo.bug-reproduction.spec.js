@@ -7,7 +7,7 @@ import * as t from 'lib0/testing'
  */
 export const testUndoMapSetAndDeleteFromArray = tc => {
   const { testConnector, array0, array1 } = init(tc, { users: 3 })
-  const undoManager = new Y.UndoManager(array0)
+  const undoManager = new Y.UndoManager(array0) // Other workaround: { ignoreRemoteMapChanges: true }
 
   const mapInArray = new Y.Map()
   mapInArray.set('untouchedProp', 'untouched prop value')
